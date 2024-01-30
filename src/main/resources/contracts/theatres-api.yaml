@@ -1,0 +1,79 @@
+openapi: 3.0.3
+servers:
+  - description: Configuration Service
+    url: http://localhost:8080/client-api/v1
+info:
+  title: Movie Ticket Theatre Search API
+  version: 1.0.0
+tags:
+  - name: Theatre
+paths:
+  /theatres:
+    get:
+      summary: Get theatres running a specific movie in the town
+      parameters:
+        - name: movie
+          in: query
+          description: The selected movie for which you want to browse theatres
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: The chosen date to filter show timings
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  theatres:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        city:
+                          type: string
+                        show_timings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              time:
+                                type: string
+              example:
+                theatres:
+                  - id: 1
+                    name: "ABC Cinema"
+                    location: "Downtown"
+                    show_timings:
+                      - time: "15:00"
+                      - time: "18:30"
+                  - id: 2
+                    name: "XYZ Theatre"
+                    location: "Uptown"
+                    show_timings:
+                      - time: "14:45"
+                      - time: "19:15"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                error: "Invalid parameters"
+        '404':
+          description: Movie or theatres not found
+          content:
+            application/json:
+              example:
+                error: "Movie or theatres not found"

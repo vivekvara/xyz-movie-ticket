@@ -1,0 +1,57 @@
+openapi: 3.0.3
+servers:
+  - description: Configuration Service
+    url: http://localhost:8080/client-api/v1
+info:
+  title: Movie Ticket Booking API
+  version: 1.0.0
+tags:
+  - name: Booking
+paths:
+  /bookings:
+    post:
+      summary: Book movie tickets
+      requestBody:
+        description: Request body for booking movie tickets
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theatreId:
+                  type: integer
+                  description: ID of the selected theatre
+                movieTiming:
+                  type: string
+                  format: time
+                  description: Selected movie timing
+                date:
+                  type: string
+                  format: date
+                  description: Date of the show
+                seats:
+                  type: array
+                  items:
+                    type: string
+                  description: List of preferred seat numbers
+      responses:
+        '201':
+          description: Booking successful
+          content:
+            application/json:
+              example:
+                bookingId: 123
+                confirmationCode: "ABC123"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                error: "Invalid request format"
+        '404':
+          description: Theatre or movie not found
+          content:
+            application/json:
+              example:
+                error: "Theatre or movie not found"
